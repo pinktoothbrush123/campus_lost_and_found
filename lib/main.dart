@@ -23,28 +23,25 @@ class MyApp extends StatelessWidget {
       title: 'AdDULostHub',
       theme: ThemeData(primarySwatch: Colors.blue),
       home: FutureBuilder(
-        future: AuthService()
-            .signInSilently(), // Check if the user is already signed in
+        future: AuthService().signInSilently(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
-          // If the user is already signed in, go to the dashboard
+
           if (snapshot.hasData) {
             return DashboardPage();
           }
-          // If not, go to the login page
+
           return LoginPage();
         },
       ),
       onUnknownRoute: (settings) {
-        // Redirect to LoginPage when the route is not found
         return MaterialPageRoute(builder: (_) => LoginPage());
       },
       routes: {
         '/dashboard': (context) => DashboardPage(),
         '/login': (context) => LoginPage(),
-        // Add other named routes here if needed
       },
     );
   }

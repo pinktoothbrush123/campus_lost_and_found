@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
-import 'login_page.dart'; // Assuming you have a login page
+import 'login_page.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -19,7 +19,6 @@ class _SignUpPageState extends State<SignUpPage> {
     final password = _passwordController.text;
     final confirmPassword = _confirmPasswordController.text;
 
-    // Check if passwords match
     if (password != confirmPassword) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Passwords do not match')),
@@ -29,7 +28,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
     final user = await _authService.signUpWithEmailPassword(email, password);
     if (user != null) {
-      // Redirect to login page or dashboard after successful sign-up
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => LoginPage()),

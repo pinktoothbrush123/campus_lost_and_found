@@ -6,7 +6,6 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  // Method to sign up with email and password
   Future<User?> signUpWithEmailPassword(String email, String password) async {
     try {
       final UserCredential userCredential =
@@ -21,7 +20,6 @@ class AuthService {
     }
   }
 
-  // Existing Google sign-in method (no changes needed)
   Future<User?> signInWithGoogle() async {
     try {
       if (kIsWeb) {
@@ -51,7 +49,6 @@ class AuthService {
     }
   }
 
-  // Silent sign-in method (no changes needed)
   Future<User?> signInSilently() async {
     try {
       if (kIsWeb) {
@@ -79,7 +76,6 @@ class AuthService {
     }
   }
 
-  // Method to handle guest login (no changes needed)
   Future<void> guestLogin() async {
     try {
       await _auth.signInAnonymously();
@@ -88,7 +84,6 @@ class AuthService {
     }
   }
 
-  // Method to sign out (no changes needed)
   Future<void> signOut() async {
     try {
       if (!kIsWeb) {

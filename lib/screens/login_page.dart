@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
-import 'dashboard_page.dart'; // Assuming you have a dashboard page
+import 'dashboard_page.dart';
 
 class LoginPage extends StatelessWidget {
   final AuthService _authService = AuthService();
 
-  LoginPage({super.key}); // Remove const here
+  LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,6 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 40),
-              // Log in with Gmail button
               SizedBox(
                 width: size.width * 0.7,
                 height: size.height * 0.06,
@@ -45,7 +44,6 @@ class LoginPage extends StatelessWidget {
                   onPressed: () async {
                     final user = await _authService.signInWithGoogle();
                     if (user != null) {
-                      // Redirect to Dashboard after successful login
                       Navigator.pushReplacementNamed(context, '/dashboard');
                     }
                   },
@@ -56,11 +54,10 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              // Guest button
               OutlinedButton(
                 onPressed: () async {
                   await _authService.guestLogin();
-                  // Redirect to Dashboard for guest user
+
                   Navigator.pushReplacementNamed(context, '/dashboard');
                 },
                 style: OutlinedButton.styleFrom(
