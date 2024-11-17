@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "345519256458",
+    "project_id": "t2024cs3-campuslostandfound",
+    "storage_bucket": "t2024cs3-campuslostandfound.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:345519256458:android:7e2f77c5e52578cb058e73",
+        "android_client_info": {
+          "package_name": "com.campuslostandfound.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "345519256458-bp49er4kqvj32mbf84iclml7ss7p8j6o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.campuslostandfound.app",
+            "certificate_hash": "727faef8313c7d096fa40299aaffa924c244c96e"
+          }
+        },
+        {
+          "client_id": "345519256458-hrcjsgin16ehtnamqb503l1t96lptpo2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.campuslostandfound.app",
+            "certificate_hash": "2fd45744c25cb63788dcdebe0442f82b55bf8153"
+          }
+        },
+        {
+          "client_id": "345519256458-440rs60t9qmh6vgme60bg90dg3d6bsb3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBr3-SRYFk2cCfDEVMMXzQ2OpemLJH7b6I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "345519256458-440rs60t9qmh6vgme60bg90dg3d6bsb3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "345519256458-fucj5o7je1nqihh8sh9fs140jvn9ov94.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.campuslostandfound"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:345519256458:android:e04db0037d5b3cea058e73",
+        "android_client_info": {
+          "package_name": "come.addulosthub.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "345519256458-440rs60t9qmh6vgme60bg90dg3d6bsb3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBr3-SRYFk2cCfDEVMMXzQ2OpemLJH7b6I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "345519256458-440rs60t9qmh6vgme60bg90dg3d6bsb3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "345519256458-fucj5o7je1nqihh8sh9fs140jvn9ov94.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.campuslostandfound"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
