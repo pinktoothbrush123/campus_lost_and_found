@@ -16,6 +16,7 @@ dependencies:
   google_sign_in_web: ^0.10.0  
   flutter_svg: ^2.0.5
   responsive_framework: ^0.1.5
+  carousel_slider: ^5.0.0
 
 
 dev_dependencies:
