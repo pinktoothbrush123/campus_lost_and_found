@@ -47,10 +47,10 @@
               "client_type": 3
             },
             {
-              "client_id": "345519256458-fucj5o7je1nqihh8sh9fs140jvn9ov94.apps.googleusercontent.com",
+              "client_id": "345519256458-8magsj6dklnt8oq44s1umnf59ibgifbi.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.campuslostandfound"
+                "bundle_id": "com.example.adduLostHub"
               }
             }
           ]
@@ -83,10 +83,10 @@
               "client_type": 3
             },
             {
-              "client_id": "345519256458-fucj5o7je1nqihh8sh9fs140jvn9ov94.apps.googleusercontent.com",
+              "client_id": "345519256458-8magsj6dklnt8oq44s1umnf59ibgifbi.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.campuslostandfound"
+                "bundle_id": "com.example.adduLostHub"
               }
             }
           ]

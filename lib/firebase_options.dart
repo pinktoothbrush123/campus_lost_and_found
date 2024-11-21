@@ -46,7 +46,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '345519256458',
     projectId: 't2024cs3-campuslostandfound',
     authDomain: 't2024cs3-campuslostandfound.firebaseapp.com',
-    storageBucket: 't2024cs3-campuslostandfound.appspot.com',
+    storageBucket: 't2024cs3-campuslostandfound.firebasestorage.app',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
@@ -54,7 +54,7 @@ class DefaultFirebaseOptions {
     appId: '1:345519256458:android:e04db0037d5b3cea058e73',
     messagingSenderId: '345519256458',
     projectId: 't2024cs3-campuslostandfound',
-    storageBucket: 't2024cs3-campuslostandfound.appspot.com',
+    storageBucket: 't2024cs3-campuslostandfound.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
@@ -62,11 +62,9 @@ class DefaultFirebaseOptions {
     appId: '1:345519256458:ios:eb0f18eb478b6b55058e73',
     messagingSenderId: '345519256458',
     projectId: 't2024cs3-campuslostandfound',
-    storageBucket: 't2024cs3-campuslostandfound.appspot.com',
-    androidClientId:
-        '345519256458-bp49er4kqvj32mbf84iclml7ss7p8j6o.apps.googleusercontent.com',
-    iosClientId:
-        '345519256458-8magsj6dklnt8oq44s1umnf59ibgifbi.apps.googleusercontent.com',
+    storageBucket: 't2024cs3-campuslostandfound.firebasestorage.app',
+    androidClientId: '345519256458-bp49er4kqvj32mbf84iclml7ss7p8j6o.apps.googleusercontent.com',
+    iosClientId: '345519256458-8magsj6dklnt8oq44s1umnf59ibgifbi.apps.googleusercontent.com',
     iosBundleId: 'com.example.adduLostHub',
   );
 
@@ -75,11 +73,9 @@ class DefaultFirebaseOptions {
     appId: '1:345519256458:ios:eb0f18eb478b6b55058e73',
     messagingSenderId: '345519256458',
     projectId: 't2024cs3-campuslostandfound',
-    storageBucket: 't2024cs3-campuslostandfound.appspot.com',
-    androidClientId:
-        '345519256458-bp49er4kqvj32mbf84iclml7ss7p8j6o.apps.googleusercontent.com',
-    iosClientId:
-        '345519256458-8magsj6dklnt8oq44s1umnf59ibgifbi.apps.googleusercontent.com',
+    storageBucket: 't2024cs3-campuslostandfound.firebasestorage.app',
+    androidClientId: '345519256458-bp49er4kqvj32mbf84iclml7ss7p8j6o.apps.googleusercontent.com',
+    iosClientId: '345519256458-8magsj6dklnt8oq44s1umnf59ibgifbi.apps.googleusercontent.com',
     iosBundleId: 'com.example.adduLostHub',
   );
 
@@ -89,6 +85,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '345519256458',
     projectId: 't2024cs3-campuslostandfound',
     authDomain: 't2024cs3-campuslostandfound.firebaseapp.com',
-    storageBucket: 't2024cs3-campuslostandfound.appspot.com',
+    storageBucket: 't2024cs3-campuslostandfound.firebasestorage.app',
   );
+
 }

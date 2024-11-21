@@ -61,7 +61,7 @@ class LoginPage extends StatelessWidget {
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white, // White background
-                      foregroundColor: Color(0xff004e92), // Blue text
+                      foregroundColor: const Color(0xff004e92), // Blue text
                       shape: RoundedRectangleBorder(
                         borderRadius:
                             BorderRadius.circular(20), // Rounded edges
@@ -81,7 +81,7 @@ class LoginPage extends StatelessWidget {
                     },
                     style: OutlinedButton.styleFrom(
                       backgroundColor: Colors.white, // White background
-                      foregroundColor: Color(0xff004e92), // Blue text
+                      foregroundColor: const Color(0xff004e92), // Blue text
                       side: const BorderSide(
                           color: Color(0xff004e92)), // Blue border
                       shape: RoundedRectangleBorder(
