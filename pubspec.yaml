@@ -1,16 +1,16 @@
 name: addu_lost_hub
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: 'none' # Prevents publishing this package to pub.dev
 version: 0.1.0
 
 environment:
-  sdk: ^3.5.3
+  sdk: ">=3.5.3 <4.0.0" # Specifies the range for compatible Dart SDK versions
 
 dependencies:
   flutter:
     sdk: flutter
-  firebase_core: 3.8.0
-  firebase_storage: 12.3.6
+  firebase_core: ^3.8.0
+  firebase_storage: ^12.3.6
   cloud_firestore: ^5.5.0
   firebase_core_web: ^2.18.1
   intl: ^0.18.0
@@ -20,7 +20,8 @@ dependencies:
   flutter_svg: ^2.0.5
   responsive_framework: ^0.1.5
   carousel_slider: ^5.0.0
-
+  flutter_spinkit: ^5.2.1
+  blobs: ^2.0.0
 
 dev_dependencies:
   flutter_test:
@@ -29,6 +30,14 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  # Specify your asset files here
   assets:
-    - lib/assets/logo.png
-  
+    - lib/assets/icons/logo.png
+
+  fonts:
+    - family: Montserrat
+      fonts:
+        - asset: lib/assets/fonts/Montserrat-Regular.ttf
+        - asset: lib/assets/fonts/Montserrat-Bold.ttf
+          weight: 700

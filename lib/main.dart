@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart'; // Import the FirebaseOptions file
+import 'firebase_options.dart';
 import 'screens/login_page.dart';
-import 'screens/dashboard_page.dart'; // Assuming you create a dashboard page
+import 'screens/dashboard_page.dart';
 import 'services/auth_service.dart';
 
 void main() async {
@@ -21,7 +21,16 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'AdDULostHub',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        fontFamily: 'Montserrat', // Set Montserrat as the global font
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
+          bodyMedium: TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
+          headlineSmall: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          headlineMedium: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+      ),
       home: FutureBuilder(
         future: AuthService().signInSilently(),
         builder: (context, snapshot) {
@@ -30,7 +39,7 @@ class MyApp extends StatelessWidget {
           }
 
           if (snapshot.hasData) {
-            return DashboardPage();
+            return const Dashboard();
           }
 
           return LoginPage();
@@ -40,7 +49,7 @@ class MyApp extends StatelessWidget {
         return MaterialPageRoute(builder: (_) => LoginPage());
       },
       routes: {
-        '/dashboard': (context) => DashboardPage(),
+        '/dashboard': (context) => const Dashboard(),
         '/login': (context) => LoginPage(),
       },
     );

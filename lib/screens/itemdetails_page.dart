@@ -1,95 +1,176 @@
+import 'package:addu_lost_hub/components/item_carousel.dart';
 import 'package:flutter/material.dart';
-import 'package:addu_lost_hub/models/lost_item.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-class ItemDetailsScreen extends StatelessWidget {
-  final LostItem item;
+class ItemDetailPage extends StatefulWidget {
+  final String itemId;
 
-  const ItemDetailsScreen({super.key, required this.item});
+  const ItemDetailPage({super.key, required this.itemId});
+
+  @override
+  State<ItemDetailPage> createState() => _ItemDetailPageState();
+}
+
+class _ItemDetailPageState extends State<ItemDetailPage> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  Map<String, dynamic>? itemData;
+  bool _loading = true;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchItemDetails();
+  }
+
+  Future<void> fetchItemDetails() async {
+    try {
+      DocumentSnapshot docSnapshot =
+          await _firestore.collection("items").doc(widget.itemId).get();
+      if (docSnapshot.exists) {
+        setState(() {
+          itemData = docSnapshot.data() as Map<String, dynamic>;
+          _loading = false;
+        });
+      } else {
+        setState(() {
+          _error = "Item not found.";
+          _loading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _error = "Error fetching item details: $e";
+        _loading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(item.name),
-        backgroundColor: Colors.blue,
+        title: const Text(
+          "Item Details",
+          style: TextStyle(fontFamily: 'Montserrat'),
+        ),
+        backgroundColor: const Color(0xFF002EB0),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Displaying the image dynamically
-            FutureBuilder<String?>(
-              future: item.getImageUrl(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return _buildPlaceholderImage(); // Placeholder while loading
-                } else if (snapshot.hasError || !snapshot.hasData) {
-                  return _buildPlaceholderImage(); // Placeholder if no image URL
-                } else {
-                  return _buildImage(
-                      snapshot.data!); // Display image if URL is found
-                }
-              },
-            ),
-
-            // Item details
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item.name,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'Location: ${item.location}',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'Description: ${item.description}',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ],
+      body: _loading
+          ? const Center(
+              child: SpinKitChasingDots(
+                color: Color(0xFF002EB0),
+                size: 50.0,
               ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+            )
+          : _error != null
+              ? Center(
+                  child: Text(
+                    _error!,
+                    style: const TextStyle(
+                      color: Colors.red,
+                      fontSize: 16,
+                      fontFamily: 'Montserrat',
+                    ),
+                  ),
+                )
+              : SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Image Carousel for all images
+                        itemData?['imageUrl'] != null
+                            ? (itemData?['imageUrl'] is List
+                                ? ItemCarousel(
+                                    items: List<Map<String, dynamic>>.from(
+                                      (itemData?['imageUrl'] as List<dynamic>)
+                                          .map(
+                                        (url) => {
+                                          'imageUrl': url,
+                                          'name': itemData?['name']
+                                        },
+                                      ),
+                                    ),
+                                    onItemTap: (item) {
+                                      print('Tapped on: ${item['name']}');
+                                    },
+                                  )
+                                : ItemCarousel(
+                                    items: [
+                                      {
+                                        'imageUrl': itemData?['imageUrl'],
+                                        'name': itemData?['name']
+                                      }
+                                    ],
+                                    onItemTap: (item) {
+                                      print('Tapped on: ${item['name']}');
+                                    },
+                                  ))
+                            : Container(
+                                height: 200,
+                                color: Colors.grey[200],
+                                child: const Center(
+                                  child: Text(
+                                    'No Image Available',
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontFamily: 'Montserrat',
+                                    ),
+                                  ),
+                                ),
+                              ),
+                        const SizedBox(height: 20),
 
-  // Helper widget to display the image
-  Widget _buildImage(String imageUrl) {
-    return Container(
-      width: double.infinity,
-      height: 200,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: NetworkImage(
-              imageUrl), // Use NetworkImage to display the image dynamically
-          fit: BoxFit.cover,
-        ),
-      ),
-    );
-  }
+                        // Item Name
+                        Text(
+                          itemData?['name'] ?? 'No Name',
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                            fontFamily: 'Montserrat',
+                          ),
+                        ),
+                        const SizedBox(height: 10),
 
-  // Helper widget for placeholder image
-  Widget _buildPlaceholderImage() {
-    return Container(
-      width: double.infinity,
-      height: 200,
-      color: Colors.grey.shade300,
-      child: const Icon(
-        Icons.image_not_supported,
-        color: Colors.grey,
-        size: 50,
-      ),
+                        // Item Description
+                        Text(
+                          itemData?['description'] ?? 'No Description',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.black54,
+                            fontFamily: 'Montserrat',
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+
+                        // Status
+                        Text(
+                          'Status: ${itemData?['status'] ?? 'No Status'}',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.black87,
+                            fontFamily: 'Montserrat',
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+
+                        // Location
+                        Text(
+                          'Location: ${itemData?['location'] ?? 'No Location'}',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.black87,
+                            fontFamily: 'Montserrat',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
     );
   }
 }
