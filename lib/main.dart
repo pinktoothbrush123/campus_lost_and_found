@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       title: 'AdDULostHub',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        fontFamily: 'Montserrat', // Set Montserrat as the global font
+        fontFamily: 'Montserrat',
         textTheme: const TextTheme(
           bodyLarge: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
           bodyMedium: TextStyle(fontSize: 14, fontWeight: FontWeight.normal),

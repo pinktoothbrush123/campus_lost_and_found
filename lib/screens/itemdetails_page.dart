@@ -81,7 +81,6 @@ class _ItemDetailPageState extends State<ItemDetailPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Image Carousel for all images
                         itemData?['imageUrl'] != null
                             ? (itemData?['imageUrl'] is List
                                 ? ItemCarousel(
@@ -123,8 +122,6 @@ class _ItemDetailPageState extends State<ItemDetailPage> {
                                 ),
                               ),
                         const SizedBox(height: 20),
-
-                        // Item Name
                         Text(
                           itemData?['name'] ?? 'No Name',
                           style: const TextStyle(
@@ -135,8 +132,6 @@ class _ItemDetailPageState extends State<ItemDetailPage> {
                           ),
                         ),
                         const SizedBox(height: 10),
-
-                        // Item Description
                         Text(
                           itemData?['description'] ?? 'No Description',
                           style: const TextStyle(
@@ -146,8 +141,6 @@ class _ItemDetailPageState extends State<ItemDetailPage> {
                           ),
                         ),
                         const SizedBox(height: 20),
-
-                        // Status
                         Text(
                           'Status: ${itemData?['status'] ?? 'No Status'}',
                           style: const TextStyle(
@@ -157,8 +150,6 @@ class _ItemDetailPageState extends State<ItemDetailPage> {
                           ),
                         ),
                         const SizedBox(height: 10),
-
-                        // Location
                         Text(
                           'Location: ${itemData?['location'] ?? 'No Location'}',
                           style: const TextStyle(

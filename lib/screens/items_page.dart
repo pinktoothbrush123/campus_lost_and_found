@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../components/item_container.dart';
-import '../components/search_bar.dart'
-    as search_bar; // Use alias for search bar
+import '../components/search_bar.dart' as search_bar;
 import 'package:blobs/blobs.dart' as blobs;
 
 typedef FirestoreBlob = Blob;
@@ -20,7 +19,6 @@ class _SeeAllItemsPageState extends State<SeeAllItemsPage> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = "";
 
-  // Fetch all items from Firestore
   Future<List<Map<String, dynamic>>> fetchAllItems() async {
     List<Map<String, dynamic>> itemsList = [];
 
@@ -41,7 +39,6 @@ class _SeeAllItemsPageState extends State<SeeAllItemsPage> {
     return itemsList;
   }
 
-  // Filter items based on search query
   List<Map<String, dynamic>> _filterItems(List<Map<String, dynamic>> items) {
     if (_searchQuery.isEmpty) {
       return items;

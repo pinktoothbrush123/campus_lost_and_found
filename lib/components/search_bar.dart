@@ -29,7 +29,6 @@ class _SearchItemBarState extends State<SearchItemBar> {
       padding: const EdgeInsets.all(4.0),
       child: Row(
         children: [
-          // Search Input Field
           Expanded(
             child: TextField(
               controller: widget.controller,
@@ -49,7 +48,6 @@ class _SearchItemBarState extends State<SearchItemBar> {
             ),
           ),
           const SizedBox(width: 8),
-          // Search Icon Button
           IconButton(
             onPressed: () {
               _focusNode.unfocus();

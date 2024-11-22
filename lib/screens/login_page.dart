@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
-import 'dashboard_page.dart';
 import 'package:blobs/blobs.dart';
 
 class LoginPage extends StatelessWidget {
@@ -16,10 +15,9 @@ class LoginPage extends StatelessWidget {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        color: Colors.white, // Set background color to white
+        color: Colors.white,
         child: Stack(
           children: [
-            // Blob shapes for background design
             Positioned(
               top: -120,
               left: -100,
@@ -65,7 +63,6 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
             ),
-            // Main content of the page
             Center(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
@@ -79,7 +76,7 @@ class LoginPage extends StatelessWidget {
                       'By: Ateneo de Davao University',
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Colors.black87, // Set text color to black
+                            color: Colors.black87,
                           ),
                     ),
                     const SizedBox(height: 40),
@@ -95,11 +92,10 @@ class LoginPage extends StatelessWidget {
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white, // White background
-                          foregroundColor: const Color(0xff004e92), // Blue text
+                          backgroundColor: Colors.white,
+                          foregroundColor: const Color(0xff004e92),
                           shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(20), // Rounded edges
+                            borderRadius: BorderRadius.circular(20),
                           ),
                         ),
                         child: const Text('Sign in with Gmail'),
@@ -115,13 +111,11 @@ class LoginPage extends StatelessWidget {
                           Navigator.pushReplacementNamed(context, '/dashboard');
                         },
                         style: OutlinedButton.styleFrom(
-                          backgroundColor: Colors.white, // White background
-                          foregroundColor: const Color(0xff004e92), // Blue text
-                          side: const BorderSide(
-                              color: Color(0xff004e92)), // Blue border
+                          backgroundColor: Colors.white,
+                          foregroundColor: const Color(0xff004e92),
+                          side: const BorderSide(color: Color(0xff004e92)),
                           shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(20), // Rounded edges
+                            borderRadius: BorderRadius.circular(20),
                           ),
                         ),
                         child: const Text('Sign in as Guest'),

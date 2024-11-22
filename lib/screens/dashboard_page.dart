@@ -23,7 +23,6 @@ class _DashboardState extends State<Dashboard> {
   String _searchQuery = "";
   String _selectedCategory = "All";
 
-  // Fetch items from Firestore
   Future<List<Map<String, dynamic>>> fetchItems(
       {bool showTodayOnly = true}) async {
     List<Map<String, dynamic>> itemsList = [];
@@ -45,11 +44,9 @@ class _DashboardState extends State<Dashboard> {
       for (var docSnapshot in querySnapshot.docs) {
         final itemData = docSnapshot.data() as Map<String, dynamic>;
         itemData['id'] = docSnapshot.id;
-        itemData['name'] = itemData['name'] ?? ''; // Handle nulls for name
-        itemData['description'] =
-            itemData['description'] ?? ''; // Handle nulls for description
-        itemData['category'] =
-            itemData['category'] ?? 'Unknown'; // Handle nulls for category
+        itemData['name'] = itemData['name'] ?? '';
+        itemData['description'] = itemData['description'] ?? '';
+        itemData['category'] = itemData['category'] ?? 'Unknown';
         itemsList.add(itemData);
       }
     } catch (e) {
@@ -58,11 +55,9 @@ class _DashboardState extends State<Dashboard> {
     return itemsList;
   }
 
-  // Filter items based on selected category and search query
   List<Map<String, dynamic>> _filterItems(List<Map<String, dynamic>> items) {
     List<Map<String, dynamic>> filteredItems = items;
 
-    // Filter by category
     if (_selectedCategory != "All") {
       filteredItems = filteredItems
           .where((item) =>
@@ -71,7 +66,6 @@ class _DashboardState extends State<Dashboard> {
           .toList();
     }
 
-    // Filter by search query
     if (_searchQuery.isNotEmpty) {
       filteredItems = filteredItems
           .where((item) =>
@@ -87,7 +81,6 @@ class _DashboardState extends State<Dashboard> {
     return filteredItems;
   }
 
-  // Sign out user
   Future<void> _signOut() async {
     await FirebaseAuth.instance.signOut();
     if (mounted) {
@@ -328,7 +321,6 @@ class _DashboardState extends State<Dashboard> {
   }
 }
 
-// Category filter widget
 class CategoryFilter extends StatelessWidget {
   final String selectedCategory;
   final Function(String) onCategorySelected;
@@ -343,13 +335,12 @@ class CategoryFilter extends StatelessWidget {
   Widget build(BuildContext context) {
     return DropdownButton<String>(
       value: selectedCategory,
-      items:
-          ['All', 'Electronics', 'Clothing', 'Furniture'] // Example categories
-              .map((category) => DropdownMenuItem<String>(
-                    value: category,
-                    child: Text(category),
-                  ))
-              .toList(),
+      items: ['All', 'Electronics', 'Clothing', 'Furniture']
+          .map((category) => DropdownMenuItem<String>(
+                value: category,
+                child: Text(category),
+              ))
+          .toList(),
       onChanged: (category) {
         if (category != null) {
           onCategorySelected(category);
@@ -359,7 +350,6 @@ class CategoryFilter extends StatelessWidget {
   }
 }
 
-// Search bar widget
 class SearchItemBar extends StatelessWidget {
   final TextEditingController controller;
   final VoidCallback onSearch;
