@@ -1,3 +1,4 @@
+import 'package:addu_lost_hub/screens/add_item_page.dart';
 import 'package:addu_lost_hub/screens/items_page.dart';
 import 'package:addu_lost_hub/screens/itemdetails_page.dart';
 import 'package:addu_lost_hub/screens/login_page.dart';
@@ -316,6 +317,16 @@ class _DashboardState extends State<Dashboard> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color(0xFF002EB0),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddItemPage()),
+          );
+        },
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }

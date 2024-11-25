@@ -22,6 +22,7 @@ dependencies:
   carousel_slider: ^5.0.0
   flutter_spinkit: ^5.2.1
   blobs: ^2.0.0
+  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:
