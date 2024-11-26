@@ -1,3 +1,4 @@
+import 'package:addu_lost_hub/components/search_bar.dart';
 import 'package:addu_lost_hub/screens/add_item_page.dart';
 import 'package:addu_lost_hub/screens/items_page.dart';
 import 'package:addu_lost_hub/screens/itemdetails_page.dart';
@@ -23,6 +24,38 @@ class _DashboardState extends State<Dashboard> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = "";
   String _selectedCategory = "All";
+  List<String> _categories = ['All'];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchCategories(); // Fetch categories on initialization
+  }
+
+  Future<void> _fetchCategories() async {
+    try {
+      final snapshot = await _firestore.collection('items').get();
+      final Set<String> fetchedCategories = {};
+
+      // Add static categories
+      fetchedCategories.addAll(['All', 'Electronics', 'Clothing', 'Furniture']);
+
+      // Add categories from Firestore
+      for (var docSnapshot in snapshot.docs) {
+        final itemData = docSnapshot.data() as Map<String, dynamic>;
+        final category = itemData['category'] ?? '';
+        if (category.isNotEmpty) {
+          fetchedCategories.add(category);
+        }
+      }
+
+      setState(() {
+        _categories = fetchedCategories.toList();
+      });
+    } catch (e) {
+      print("Error fetching categories: $e");
+    }
+  }
 
   Future<List<Map<String, dynamic>>> fetchItems(
       {bool showTodayOnly = true}) async {
@@ -73,9 +106,7 @@ class _DashboardState extends State<Dashboard> {
               (item['name'] ?? '')
                   .toLowerCase()
                   .contains(_searchQuery.toLowerCase()) ||
-              (item['description'] ?? '')
-                  .toLowerCase()
-                  .contains(_searchQuery.toLowerCase()))
+              (item['description'] ?? ''))
           .toList();
     }
 
@@ -220,6 +251,7 @@ class _DashboardState extends State<Dashboard> {
             const SizedBox(height: 10),
             CategoryFilter(
               selectedCategory: _selectedCategory,
+              categories: _categories,
               onCategorySelected: (category) {
                 setState(() {
                   _selectedCategory = category;
@@ -283,31 +315,23 @@ class _DashboardState extends State<Dashboard> {
                           ),
                         ),
                         Expanded(
-                          child: filteredItems.isEmpty
-                              ? const Center(
-                                  child: Text(
-                                  "No items found today.",
-                                  style: TextStyle(color: Color(0xFFA8A8A8)),
-                                ))
-                              : ListView.builder(
-                                  itemCount: filteredItems.length,
-                                  itemBuilder: (context, index) {
-                                    var item = filteredItems[index];
-                                    return ItemContainer(
-                                      item: item,
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                ItemDetailPage(
-                                                    itemId: item['id']),
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  },
-                                ),
+                          child: GridView.builder(
+                            shrinkWrap: true,
+                            itemCount: filteredItems.length,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 16.0,
+                              mainAxisSpacing: 16.0,
+                            ),
+                            itemBuilder: (context, index) {
+                              final item = filteredItems[index];
+                              return ItemContainer(
+                                item: item,
+                                onTap: () {},
+                              );
+                            },
+                          ),
                         ),
                       ],
                     );
@@ -320,13 +344,25 @@ class _DashboardState extends State<Dashboard> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xFF002EB0),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const AddItemPage()),
-          );
+        onPressed: () async {
+          bool isAuthenticated = FirebaseAuth.instance.currentUser != null;
+          if (isAuthenticated) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const AddItemPage(),
+              ),
+            );
+          } else {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => LoginPage(),
+              ),
+            );
+          }
         },
-        child: const Icon(Icons.add, color: Colors.white),
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -334,19 +370,27 @@ class _DashboardState extends State<Dashboard> {
 
 class CategoryFilter extends StatelessWidget {
   final String selectedCategory;
+  final List<String> categories;
   final Function(String) onCategorySelected;
 
   const CategoryFilter({
     super.key,
     required this.selectedCategory,
+    required this.categories,
     required this.onCategorySelected,
   });
 
   @override
   Widget build(BuildContext context) {
+    // Remove duplicates in categories list
+    List<String> uniqueCategories = categories.toSet().toList();
+
     return DropdownButton<String>(
-      value: selectedCategory,
-      items: ['All', 'Electronics', 'Clothing', 'Furniture']
+      value: uniqueCategories.contains(selectedCategory)
+          ? selectedCategory
+          : uniqueCategories
+              .first, // Default to the first category if the selected one is invalid
+      items: uniqueCategories
           .map((category) => DropdownMenuItem<String>(
                 value: category,
                 child: Text(category),
@@ -357,30 +401,6 @@ class CategoryFilter extends StatelessWidget {
           onCategorySelected(category);
         }
       },
-    );
-  }
-}
-
-class SearchItemBar extends StatelessWidget {
-  final TextEditingController controller;
-  final VoidCallback onSearch;
-
-  const SearchItemBar({
-    super.key,
-    required this.controller,
-    required this.onSearch,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      onChanged: (value) => onSearch(),
-      decoration: const InputDecoration(
-        hintText: "Search items...",
-        suffixIcon: Icon(Icons.search),
-        border: OutlineInputBorder(),
-      ),
     );
   }
 }

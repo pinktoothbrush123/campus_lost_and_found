@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:blobs/blobs.dart' as blobs;
 
 class AddItemPage extends StatefulWidget {
   const AddItemPage({super.key});
@@ -71,8 +72,7 @@ class _AddItemPageState extends State<AddItemPage> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Item added successfully!')),
-      );
+          const SnackBar(content: Text('Item added successfully!')));
 
       // Redirect to the dashboard
       Future.delayed(const Duration(seconds: 2), () {
@@ -80,21 +80,68 @@ class _AddItemPageState extends State<AddItemPage> {
             context, '/dashboard'); // Adjust route if necessary
       });
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to add item: $e')),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Failed to add item: $e')));
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    double blobSize = screenHeight * 0.3;
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Add Item',
-          style: TextStyle(color: Colors.white),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(70),
+        child: Stack(
+          children: [
+            Positioned(
+              top: -140,
+              left: -60,
+              child: blobs.Blob.fromID(
+                id: const ['18-6-103'],
+                size: blobSize,
+                styles: blobs.BlobStyles(
+                  color: const Color(0xFFE0E6F6),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: -160,
+              left: screenWidth * 0.6,
+              child: blobs.Blob.fromID(
+                id: const ['18-6-103'],
+                size: blobSize,
+                styles: blobs.BlobStyles(
+                  color: const Color(0xFF002EB0),
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.center,
+              child: Image.asset(
+                'lib/assets/icons/logo.png',
+                height: 100,
+                width: 100,
+                fit: BoxFit.contain,
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: IconButton(
+                icon: const Icon(
+                  Icons.arrow_back,
+                  color: Color(0xFF525660),
+                  size: 25,
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ),
+          ],
         ),
-        backgroundColor: const Color(0xFF002EB0),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),

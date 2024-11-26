@@ -2,6 +2,7 @@ import 'package:addu_lost_hub/components/item_carousel.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'update_item_page.dart';
 
 class ItemDetailPage extends StatefulWidget {
   final String itemId;
@@ -156,6 +157,28 @@ class _ItemDetailPageState extends State<ItemDetailPage> {
                             fontSize: 16,
                             color: Colors.black87,
                             fontFamily: 'Montserrat',
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    UpdateItemPage(itemId: widget.itemId),
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF002EB0),
+                          ),
+                          child: const Text(
+                            "Update Item",
+                            style: TextStyle(
+                              fontFamily: 'Montserrat',
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ],
