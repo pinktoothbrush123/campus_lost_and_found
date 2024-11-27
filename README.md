@@ -34,9 +34,8 @@
 `pub get`
 
 # Run the App:
-## Copy code
-`npm start` 
-### **PLEASE DO THIS IMPORTANT**  
+ 
+### <span style="color:red;">PLEASE DO THIS IMPORTANT</span>
 `flutter run -d chrome --web-renderer html`
 ## Usage
 ### Sign Up / Login: Use your email or social media to access the platform.
