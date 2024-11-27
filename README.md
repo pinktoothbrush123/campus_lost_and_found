@@ -65,10 +65,11 @@
 ### For any inquiries or feedback:
 
 # Team
-
 ### Parcia, Jin Andrei Y.
-
-### Jaraplasan, Dan Gabriel
-
 ### Email: secret
 ### GitHub: pinktoothbrush13
+
+### Jaraplasan, Dan Gabriel
+### Email: secret
+### GitHub: 
+
