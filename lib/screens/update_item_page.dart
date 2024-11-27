@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:blobs/blobs.dart' as blobs;
 
@@ -20,8 +19,6 @@ class _UpdateItemPageState extends State<UpdateItemPage> {
   String _selectedCategory = 'Electronics';
   String _selectedStatus = 'Lost';
   bool _isHidden = false;
-  File? _selectedImage;
-  String? _imageUrl; // To hold the current image URL
 
   final List<String> _categories = [
     'Electronics',
@@ -53,40 +50,11 @@ class _UpdateItemPageState extends State<UpdateItemPage> {
       _selectedStatus =
           _statuses.contains(data['status']) ? data['status'] : 'Lost';
       _isHidden = data['hidden'] ?? false;
-      _imageUrl = data['photo']; // Load the existing image URL
     }
     setState(() {});
   }
 
-  Future<void> _pickImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        _selectedImage = File(pickedFile.path);
-      });
-    }
-  }
-
-  Future<String?> _uploadImage() async {
-    if (_selectedImage == null) return null;
-
-    try {
-      String fileName =
-          'item_photos/${widget.itemId}_${DateTime.now().millisecondsSinceEpoch}.jpg';
-      UploadTask uploadTask =
-          FirebaseStorage.instance.ref(fileName).putFile(_selectedImage!);
-      TaskSnapshot snapshot = await uploadTask;
-      return await snapshot.ref.getDownloadURL();
-    } catch (e) {
-      print("Error uploading image: $e");
-      return null;
-    }
-  }
-
   Future<void> _updateItem() async {
-    String? newImageUrl = await _uploadImage();
-
     await FirebaseFirestore.instance
         .collection("items")
         .doc(widget.itemId)
@@ -97,8 +65,6 @@ class _UpdateItemPageState extends State<UpdateItemPage> {
       'category': _selectedCategory,
       'status': _selectedStatus,
       'hidden': _isHidden,
-      'photo': newImageUrl ??
-          _imageUrl, // Use new photo URL if available, else keep the old one
       'dateUpdated': DateTime.now(),
     });
 
@@ -189,9 +155,7 @@ class _UpdateItemPageState extends State<UpdateItemPage> {
               value: _selectedCategory,
               items: _categories.map((category) {
                 return DropdownMenuItem<String>(
-                  value: category,
-                  child: Text(category),
-                );
+                    value: category, child: Text(category));
               }).toList(),
               onChanged: (value) {
                 if (value != null) {
@@ -207,9 +171,7 @@ class _UpdateItemPageState extends State<UpdateItemPage> {
               value: _selectedStatus,
               items: _statuses.map((status) {
                 return DropdownMenuItem<String>(
-                  value: status,
-                  child: Text(status),
-                );
+                    value: status, child: Text(status));
               }).toList(),
               onChanged: (value) {
                 if (value != null) {
@@ -229,19 +191,6 @@ class _UpdateItemPageState extends State<UpdateItemPage> {
                   _isHidden = value;
                 });
               },
-            ),
-            const SizedBox(height: 10),
-            GestureDetector(
-              onTap: _pickImage,
-              child: _selectedImage != null
-                  ? Image.file(_selectedImage!, height: 150)
-                  : _imageUrl != null
-                      ? Image.network(_imageUrl!, height: 150)
-                      : Container(
-                          height: 150,
-                          color: Colors.grey[200],
-                          child: const Icon(Icons.add_a_photo, size: 50),
-                        ),
             ),
             const Spacer(),
             ElevatedButton(

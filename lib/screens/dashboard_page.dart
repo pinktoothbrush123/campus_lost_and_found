@@ -324,7 +324,6 @@ class _DashboardState extends State<Dashboard> {
                               return ItemContainer(
                                 item: item,
                                 onTap: () {
-                                  /// **Navigate to `ItemDetailsPage`**
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -346,33 +345,38 @@ class _DashboardState extends State<Dashboard> {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AddItemPage(),
+            ),
+          );
+        },
+        backgroundColor: const Color(0xFF002EB0),
+        child: const Icon(Icons.add, color: Colors.white),
+      ),
     );
   }
 }
 
 class CategoryFilter extends StatelessWidget {
   final String selectedCategory;
-  final List<String> categories;
   final Function(String) onCategorySelected;
 
   const CategoryFilter({
     super.key,
     required this.selectedCategory,
-    required this.categories,
     required this.onCategorySelected,
+    required List<String> categories,
   });
 
   @override
   Widget build(BuildContext context) {
-    // Remove duplicates in categories list
-    List<String> uniqueCategories = categories.toSet().toList();
-
     return DropdownButton<String>(
-      value: uniqueCategories.contains(selectedCategory)
-          ? selectedCategory
-          : uniqueCategories
-              .first, // Default to the first category if the selected one is invalid
-      items: uniqueCategories
+      value: selectedCategory,
+      items: ['All', 'Electronics', 'Clothing', 'Furniture']
           .map((category) => DropdownMenuItem<String>(
                 value: category,
                 child: Text(category),
@@ -383,6 +387,30 @@ class CategoryFilter extends StatelessWidget {
           onCategorySelected(category);
         }
       },
+    );
+  }
+}
+
+class SearchItemBar extends StatelessWidget {
+  final TextEditingController controller;
+  final VoidCallback onSearch;
+
+  const SearchItemBar({
+    super.key,
+    required this.controller,
+    required this.onSearch,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      onChanged: (value) => onSearch(),
+      decoration: const InputDecoration(
+        hintText: "Search items...",
+        suffixIcon: Icon(Icons.search),
+        border: OutlineInputBorder(),
+      ),
     );
   }
 }
