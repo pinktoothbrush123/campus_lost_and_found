@@ -35,7 +35,9 @@
 
 # Run the App:
 ## Copy code
-`npm start`  
+`npm start` 
+### **PLEASE DO THIS IMPORTANT**  
+`flutter run -d chrome --web-renderer html`
 ## Usage
 ### Sign Up / Login: Use your email or social media to access the platform.
 ### Post Items: Describe the lost or found item, upload images, and provide contact details.
