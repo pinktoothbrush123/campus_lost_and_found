@@ -29,7 +29,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     super.initState();
-    _fetchCategories(); // Fetch categories on initialization
+    _fetchCategories();
   }
 
   Future<void> _fetchCategories() async {
@@ -78,9 +78,6 @@ class _DashboardState extends State<Dashboard> {
       for (var docSnapshot in querySnapshot.docs) {
         final itemData = docSnapshot.data() as Map<String, dynamic>;
         itemData['id'] = docSnapshot.id;
-        itemData['name'] = itemData['name'] ?? '';
-        itemData['description'] = itemData['description'] ?? '';
-        itemData['category'] = itemData['category'] ?? 'Unknown';
         itemsList.add(itemData);
       }
     } catch (e) {
@@ -106,7 +103,9 @@ class _DashboardState extends State<Dashboard> {
               (item['name'] ?? '')
                   .toLowerCase()
                   .contains(_searchQuery.toLowerCase()) ||
-              (item['description'] ?? ''))
+              (item['description'] ?? '')
+                  .toLowerCase()
+                  .contains(_searchQuery.toLowerCase()))
           .toList();
     }
 
@@ -187,11 +186,7 @@ class _DashboardState extends State<Dashboard> {
               decoration: BoxDecoration(
                 color: Color(0xFF002EB0),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [],
-              ),
+              child: SizedBox.shrink(),
             ),
             ListTile(
               leading: const Icon(Icons.info_outline),
@@ -328,7 +323,16 @@ class _DashboardState extends State<Dashboard> {
                               final item = filteredItems[index];
                               return ItemContainer(
                                 item: item,
-                                onTap: () {},
+                                onTap: () {
+                                  /// **Navigate to `ItemDetailsPage`**
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          ItemDetailPage(itemId: item["id"]),
+                                    ),
+                                  );
+                                },
                               );
                             },
                           ),
@@ -341,28 +345,6 @@ class _DashboardState extends State<Dashboard> {
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xFF002EB0),
-        onPressed: () async {
-          bool isAuthenticated = FirebaseAuth.instance.currentUser != null;
-          if (isAuthenticated) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const AddItemPage(),
-              ),
-            );
-          } else {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => LoginPage(),
-              ),
-            );
-          }
-        },
-        child: const Icon(Icons.add),
       ),
     );
   }

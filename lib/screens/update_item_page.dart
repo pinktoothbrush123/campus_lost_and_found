@@ -1,5 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:blobs/blobs.dart' as blobs;
 
 class UpdateItemPage extends StatefulWidget {
@@ -13,16 +16,20 @@ class UpdateItemPage extends StatefulWidget {
 class _UpdateItemPageState extends State<UpdateItemPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
   String _selectedCategory = 'Electronics';
+  String _selectedStatus = 'Lost';
   bool _isHidden = false;
+  File? _selectedImage;
+  String? _imageUrl; // To hold the current image URL
 
-  // List of categories
   final List<String> _categories = [
     'Electronics',
     'Clothing',
     'Furniture',
     'Other'
   ];
+  final List<String> _statuses = ['Lost', 'Found'];
 
   @override
   void initState() {
@@ -39,25 +46,65 @@ class _UpdateItemPageState extends State<UpdateItemPage> {
     if (data != null) {
       _nameController.text = data['name'] ?? '';
       _descriptionController.text = data['description'] ?? '';
-      // Ensure the category exists in the _categories list, if not set to default
+      _locationController.text = data['location'] ?? '';
       _selectedCategory = _categories.contains(data['category'])
           ? data['category']
           : 'Electronics';
+      _selectedStatus =
+          _statuses.contains(data['status']) ? data['status'] : 'Lost';
       _isHidden = data['hidden'] ?? false;
+      _imageUrl = data['photo']; // Load the existing image URL
     }
     setState(() {});
   }
 
+  Future<void> _pickImage() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+      });
+    }
+  }
+
+  Future<String?> _uploadImage() async {
+    if (_selectedImage == null) return null;
+
+    try {
+      String fileName =
+          'item_photos/${widget.itemId}_${DateTime.now().millisecondsSinceEpoch}.jpg';
+      UploadTask uploadTask =
+          FirebaseStorage.instance.ref(fileName).putFile(_selectedImage!);
+      TaskSnapshot snapshot = await uploadTask;
+      return await snapshot.ref.getDownloadURL();
+    } catch (e) {
+      print("Error uploading image: $e");
+      return null;
+    }
+  }
+
   Future<void> _updateItem() async {
+    String? newImageUrl = await _uploadImage();
+
     await FirebaseFirestore.instance
         .collection("items")
         .doc(widget.itemId)
         .update({
       'name': _nameController.text.trim(),
       'description': _descriptionController.text.trim(),
+      'location': _locationController.text.trim(),
       'category': _selectedCategory,
+      'status': _selectedStatus,
       'hidden': _isHidden,
+      'photo': newImageUrl ??
+          _imageUrl, // Use new photo URL if available, else keep the old one
+      'dateUpdated': DateTime.now(),
     });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Item updated successfully!')),
+    );
     Navigator.pop(context);
   }
 
@@ -133,8 +180,12 @@ class _UpdateItemPageState extends State<UpdateItemPage> {
               decoration: const InputDecoration(labelText: "Description"),
             ),
             const SizedBox(height: 10),
-            // Dropdown for category selection
-            DropdownButton<String>(
+            TextField(
+              controller: _locationController,
+              decoration: const InputDecoration(labelText: "Location"),
+            ),
+            const SizedBox(height: 10),
+            DropdownButtonFormField<String>(
               value: _selectedCategory,
               items: _categories.map((category) {
                 return DropdownMenuItem<String>(
@@ -149,7 +200,27 @@ class _UpdateItemPageState extends State<UpdateItemPage> {
                   });
                 }
               },
+              decoration: const InputDecoration(labelText: "Category"),
             ),
+            const SizedBox(height: 10),
+            DropdownButtonFormField<String>(
+              value: _selectedStatus,
+              items: _statuses.map((status) {
+                return DropdownMenuItem<String>(
+                  value: status,
+                  child: Text(status),
+                );
+              }).toList(),
+              onChanged: (value) {
+                if (value != null) {
+                  setState(() {
+                    _selectedStatus = value;
+                  });
+                }
+              },
+              decoration: const InputDecoration(labelText: "Status"),
+            ),
+            const SizedBox(height: 10),
             SwitchListTile(
               title: const Text("Hide from client view"),
               value: _isHidden,
@@ -158,6 +229,19 @@ class _UpdateItemPageState extends State<UpdateItemPage> {
                   _isHidden = value;
                 });
               },
+            ),
+            const SizedBox(height: 10),
+            GestureDetector(
+              onTap: _pickImage,
+              child: _selectedImage != null
+                  ? Image.file(_selectedImage!, height: 150)
+                  : _imageUrl != null
+                      ? Image.network(_imageUrl!, height: 150)
+                      : Container(
+                          height: 150,
+                          color: Colors.grey[200],
+                          child: const Icon(Icons.add_a_photo, size: 50),
+                        ),
             ),
             const Spacer(),
             ElevatedButton(
